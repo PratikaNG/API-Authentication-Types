@@ -17,6 +17,7 @@ app.get("/", (req, res) => {
   res.render("index.ejs", { content: "API Response." });
 });
 
+// No authentication
 app.get("/noAuth", async (req, res) => {
   try{
     const response = await axios.get(API_URL + "random")
@@ -28,6 +29,7 @@ app.get("/noAuth", async (req, res) => {
   }
 });
 
+// Basic authentication (requires username and password)
 app.get("/basicAuth",async (req,res)=>{
   try{
     const response = await axios.get(API_URL + "all?page=2",{
@@ -43,6 +45,7 @@ app.get("/basicAuth",async (req,res)=>{
   }
 });
 
+// API key authentication
 app.get("/apiKey", async (req,res)=>{
   try{
     const response = await axios.get(API_URL + "filter",{
@@ -58,6 +61,21 @@ app.get("/apiKey", async (req,res)=>{
     res.send("Error:",error.message)
   }
 });
+
+// Token based authentication
+const configs = {
+  headers : {Authorization: `Bearer ${yourBearerToken}`}
+}
+app.get("/bearerToken",async (req,res)=>{
+  try{
+    const response = await axios.get(API_URL + "secrets/2",configs)
+    const result = JSON.stringify(response.data)
+    res.render("index.ejs",{content:result})
+  }
+  catch(error){
+    console.log(error)
+    res.send("Error:",error.message)
+  }});
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
