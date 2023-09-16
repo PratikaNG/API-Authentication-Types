@@ -26,9 +26,22 @@ app.get("/noAuth", async (req, res) => {
   }catch(error){
     res.send("Error:",error.message)
   }
- 
 });
 
+app.get("/basicAuth",async (req,res)=>{
+  try{
+    const response = await axios.get(API_URL + "all?page=2",{
+      auth:{
+        username:yourUsername,
+        password:yourPassword,
+      }
+    });
+    res.render("index.ejs",{content:JSON.stringify(response.data)})
+  }
+  catch(error){
+    res.send("Error:",error.message)
+  }
+});
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
