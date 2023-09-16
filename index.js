@@ -43,6 +43,22 @@ app.get("/basicAuth",async (req,res)=>{
   }
 });
 
+app.get("/apiKey", async (req,res)=>{
+  try{
+    const response = await axios.get(API_URL + "filter",{
+      params:{
+        score:5,
+        apiKey:yourAPIKey,
+      }
+    });
+    const result = JSON.stringify(response.data)
+    res.render("index.ejs",{content:result})
+  }
+  catch(error){
+    res.send("Error:",error.message)
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
